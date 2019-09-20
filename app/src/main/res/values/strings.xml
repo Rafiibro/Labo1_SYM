@@ -8,5 +8,5 @@
     <string name="wronglogin">Login failed</string>
     <string name="wrong">Email or Password not recognized</string>
     <string name="good">Valid login, welcome !</string>
-    
+    <string name="noat">Your login is not an E-mail</string>
 </resources>

@@ -33,18 +33,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     // For logging purposes
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    Map<String, String> mapEmail= new HashMap<>();
+
     // Just for test purposes : please destroy !
-	private static final String validEmail      = "toto@tutu.com";
-	private static final String validPassword   = "tata";
+	private static final String validEmail      = "a";
+	private static final String validPassword   = "b";
 
     // GUI elements
 	private EditText email      = null;
     private Button   signIn     = null;
+    private EditText password 	= null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +58,12 @@ public class MainActivity extends AppCompatActivity {
 		// Show the welcome screen / login authentication dialog
 		setContentView(R.layout.authent);
 
+		mapEmail.put("a@b.ch", "ab");
+		mapEmail.put("c@d.ch", "cd");
+
 		// Link to GUI elements
         this.email      = findViewById(R.id.email);
+		this.password   = findViewById(R.id.password);
         this.signIn     = findViewById(R.id.buttOk);
 
 		// Then program action associated to "Ok" button
@@ -64,8 +74,12 @@ public class MainActivity extends AppCompatActivity {
 			 * combination given is valid or not
 			 */
 			String mail = email.getText().toString();
-			String passwd = null; //TODO read password from EditText
-			if (isValid(mail, passwd)) {
+			String passwd = password.getText().toString(); //TODO read password from EditText
+			if (!mail.contains("@")) {
+				Toast.makeText(MainActivity.this, getResources().getString(R.string.noat), Toast.LENGTH_LONG).show();
+				email.getText().clear();
+				password.getText().clear();
+			} else if (isValid(mail, passwd)) {
 				/* Ok, valid combination, do something or launch another activity...
 				 * The current activity could be finished, but it is not mandatory.
 				 * To launch activity MyActivity.class, try something like :
@@ -95,14 +109,17 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "isValid(mail, passwd) - mail and passwd cannot be null !");
             return false;
         }
+
 		// Return true if combination valid, false otherwise
-		return (mail.equals(validEmail) && passwd.equals(validPassword));
+		return (mapEmail.containsKey(mail) && mapEmail.get(mail).equals(passwd));
 	}
 
 	private void showErrorDialog(String mail, String passwd) {
 		/*
 		 * Pop-up dialog to show error
 		 */
+		email.getText().clear();
+		password.getText().clear();
 		AlertDialog.Builder alertbd = new AlertDialog.Builder(this);
         alertbd.setIcon(android.R.drawable.ic_dialog_alert);
 		alertbd.setTitle(R.string.wronglogin);
