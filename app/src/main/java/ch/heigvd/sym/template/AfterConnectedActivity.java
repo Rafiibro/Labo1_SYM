@@ -44,6 +44,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import android.content.Intent;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.BasePermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,8 +64,6 @@ public class AfterConnectedActivity extends AppCompatActivity {
     private String mail = "";
 
     private String imeiS = "";
-
-    private int MY_PERMISSION_READ_PHONE_STATE =
 
     private TextView email      = null;
     private TextView emei       = null;
@@ -76,16 +83,14 @@ public class AfterConnectedActivity extends AppCompatActivity {
 
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ) {
 
-            MY_PERMISSION_READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE;
-
-            ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.READ_PHONE_STATE  },
-                    MY_PERMISSION_READ_PHONE_STATE );
-
+            Dexter.withActivity(this)
+                    .withPermission(Manifest.permission.READ_PHONE_STATE)
+                    .withListener(new BasePermissionListener())
+                    .check();
+        } else {
             TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
             imeiS = telephonyManager.getDeviceId();
             this.emei.setText(imeiS);
-
-
         }
 
 
