@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import android.content.Intent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +97,14 @@ public class MainActivity extends AppCompatActivity {
 				 * But just display a small message before quitting...
 				 */
 				Toast.makeText(MainActivity.this, getResources().getString(R.string.good), Toast.LENGTH_LONG).show();
-				finish();
+
+
+				Intent intent = new Intent(MainActivity.this, AfterConnectedActivity.class);
+				intent.putExtra("mail",mail);
+				startActivity(intent);
+
+
+				//finish();
 			} else {
 				// Wrong combination, display pop-up dialog and stay on login screen
 				showErrorDialog(mail, passwd);
