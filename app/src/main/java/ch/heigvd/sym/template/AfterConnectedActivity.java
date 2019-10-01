@@ -28,6 +28,9 @@ package ch.heigvd.sym.template;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -37,9 +40,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.BasePermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +74,7 @@ public class AfterConnectedActivity extends AppCompatActivity {
 
     private TextView email      = null;
     private TextView emei       = null;
+    private ImageView image = null;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -78,9 +86,31 @@ public class AfterConnectedActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         mail = intent.getStringExtra("mail");
+
         this.email      = findViewById(R.id.mail);
         this.emei      = findViewById(R.id.emei);
+        this.image = findViewById(R.id.imageView);
 
+        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+
+            Dexter.withActivity(this)
+                    .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .withListener(new BasePermissionListener())
+                    .check();
+        }
+
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File imgFile = new File(path, "perso.jpg");
+
+        if(imgFile.exists()){
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+            image.setImageBitmap(myBitmap);
+
+        }else {
+            Log.w(TAG, "Image not found");
+        }
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ) {
 
             Dexter.withActivity(this)
@@ -92,8 +122,6 @@ public class AfterConnectedActivity extends AppCompatActivity {
             imeiS = telephonyManager.getDeviceId();
             this.emei.setText(imeiS);
         }
-
-
 
 
         this.email.setText(mail);
