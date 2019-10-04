@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
 		// Link to GUI elements
         this.email      = findViewById(R.id.email);
-		this.password   = findViewById(R.id.password);
+		this.password   = findViewById(R.id.password);6
         this.signIn     = findViewById(R.id.buttOk);
 
 		// Then program action associated to "Ok" button
