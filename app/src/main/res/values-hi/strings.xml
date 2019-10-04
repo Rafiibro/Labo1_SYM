@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SYM Curry</string>
+    <string name="email">curry</string>
+    <string name="psw">Passwordcurry</string>
+    <string name="signin">ganesh</string>
+    <string name="wronglogin">brama</string>
+    <string name="wrong">bollywood</string>
+    <string name="good">wellcome friend</string>
+    <string name="noat">Your login is not an E-mail</string>
+</resources>
