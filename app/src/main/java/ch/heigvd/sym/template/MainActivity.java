@@ -25,6 +25,7 @@
  */
 package ch.heigvd.sym.template;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		// Show the welcome screen / login authentication dialog
+
 		setContentView(R.layout.authent);
 
 		mapEmail.put("a@b.ch", "ab");
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 		// Then program action associated to "Ok" button
 		signIn.setOnClickListener((v) -> {
 
-			/*
+			/*ewConfig.orientation ==
 			 * There you have to check out if the email/password
 			 * combination given is valid or not
 			 */
@@ -81,37 +83,20 @@ public class MainActivity extends AppCompatActivity {
 				email.getText().clear();
 				password.getText().clear();
 			} else if (isValid(mail, passwd)) {
-				/* Ok, valid combination, do something or launch another activity...
-				 * The current activity could be finished, but it is not mandatory.
-				 * To launch activity MyActivity.class, try something like :
-				 *
-				 * 			Intent intent = new Intent(this, ch.heigvd.sym.MyActivity.class);
-				 * 			intent.putExtra("emailEntered", mail);
-				 *			intent.putExtra("passwordGiven", passwd);
-				 *			this.startActivity(intent);
-				 *
-				 * Alternately, you could also startActivityForResult if you are awaiting a result.
-				 * In the latter case, you have to indicate an int parameter to identify MyActivity
-				 *
-				 * If you haven't anything more to do, you may finish()...
-				 * But just display a small message before quitting...
-				 */
-				Toast.makeText(MainActivity.this, getResources().getString(R.string.good), Toast.LENGTH_LONG).show();
 
+				Toast.makeText(MainActivity.this, getResources().getString(R.string.good), Toast.LENGTH_LONG).show();
 
 				Intent intent = new Intent(MainActivity.this, AfterConnectedActivity.class);
 				intent.putExtra("mail",mail);
 				startActivity(intent);
 
-
-				//finish();
 			} else {
 				// Wrong combination, display pop-up dialog and stay on login screen
 				showErrorDialog(mail, passwd);
 			}
 		});
 	}
-	
+
 	private boolean isValid(String mail, String passwd) {
         if(mail == null || passwd == null) {
             Log.w(TAG, "isValid(mail, passwd) - mail and passwd cannot be null !");
@@ -129,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 		email.getText().clear();
 		password.getText().clear();
 		AlertDialog.Builder alertbd = new AlertDialog.Builder(this);
-        alertbd.setIcon(android.R.drawable.ic_dialog_alert);
+		alertbd.setIcon(R.drawable.ic_icon_cat);
 		alertbd.setTitle(R.string.wronglogin);
 	    alertbd.setMessage(R.string.wrong);
 	    alertbd.setPositiveButton(android.R.string.ok, (dialog, which) -> {

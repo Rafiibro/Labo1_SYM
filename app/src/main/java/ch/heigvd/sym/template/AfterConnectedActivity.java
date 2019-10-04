@@ -131,6 +131,8 @@ public class AfterConnectedActivity extends AppCompatActivity {
 
     }
 
+    public void onBackPressed() {
 
+    }
 
 }
