@@ -1,8 +1,7 @@
 /*
  * File     : MainActivity.java
  * Project  : TemplateActivity
- * Author   : Markus Jaton 2 juillet 2014
- * 			  Fabien Dutoit 23 juillet 2019
+ * Author   : Rafael Da Cunha Garcia, Gaetan Bacso, Remy Vuagniaux
  *            IICT / HEIG-VD
  *                                       
  * mailto:fabien.dutoit@heig-vd.ch
@@ -33,7 +32,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import android.content.Intent;
 import java.util.HashMap;
 import java.util.Locale;
@@ -58,90 +56,80 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
 		Log.i("Info labo 1: ", "onStart()");
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		Log.i("Info labo 1: ", "onResume()");
-
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		Log.i("Info labo 1: ", "onPause()");
-
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-
 		Log.i("Info labo 1: ", "onStop()");
-
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
 		Log.i("Info labo 1: ", "onDestroy()");
-
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
 		Log.i("Info labo 1: ", "onCreate()");
 
-		String languageToLoad = "hi";
+		// Pour mettre le programme en Hindi, indiqué le langage dans languageToLoad
+		String languageToLoad = "en";
 		Locale locale = new Locale(languageToLoad);
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getResources().updateConfiguration(config,getResources().getDisplayMetrics());
 
-
 		// Show the welcome screen / login authentication dialog
-
 		setContentView(R.layout.authent);
 
+		// Emails valide pour le login
 		mapEmail.put("a@b.ch", "ab");
 		mapEmail.put("c@d.ch", "cd");
 
 		// Link to GUI elements
         this.email      = findViewById(R.id.email);
-		this.password   = findViewById(R.id.password);6
+		this.password   = findViewById(R.id.password);
         this.signIn     = findViewById(R.id.buttOk);
 
 		// Then program action associated to "Ok" button
 		signIn.setOnClickListener((v) -> {
 
-			/*ewConfig.orientation ==
-			 * There you have to check out if the email/password
-			 * combination given is valid or not
-			 */
+			// Récuperation du mail et mdp
 			String mail = email.getText().toString();
 			String passwd = password.getText().toString(); //TODO read password from EditText
+
+			// Detecte la presence d'un @
 			if (!mail.contains("@")) {
 				Toast.makeText(MainActivity.this, getResources().getString(R.string.noat), Toast.LENGTH_LONG).show();
 				email.getText().clear();
 				password.getText().clear();
-			} else if (isValid(mail, passwd)) {
-
+			}
+			// test la validité des données user
+			else if (isValid(mail, passwd)) {
+				// affiche le toast, lance la deuxième activité
 				Toast.makeText(MainActivity.this, getResources().getString(R.string.good), Toast.LENGTH_LONG).show();
-
 				Intent intent = new Intent(MainActivity.this, AfterConnectedActivity.class);
 				intent.putExtra("mail",mail);
 				startActivity(intent);
-
 			} else {
 				// Wrong combination, display pop-up dialog and stay on login screen
 				showErrorDialog(mail, passwd);
@@ -154,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "isValid(mail, passwd) - mail and passwd cannot be null !");
             return false;
         }
-
 		// Return true if combination valid, false otherwise
 		return (mapEmail.containsKey(mail) && mapEmail.get(mail).equals(passwd));
 	}

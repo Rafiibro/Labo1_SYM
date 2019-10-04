@@ -1,8 +1,7 @@
 /*
  * File     : MainActivity.java
  * Project  : TemplateActivity
- * Author   : Markus Jaton 2 juillet 2014
- * 			  Fabien Dutoit 23 juillet 2019
+ * Author   : Rafael Da Cunha Garcia, Gaetan Bacso, Remy Vuagniaux
  *            IICT / HEIG-VD
  *
  * mailto:fabien.dutoit@heig-vd.ch
@@ -30,38 +29,20 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import android.content.Intent;
-
 import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.BasePermissionListener;
-import com.karumi.dexter.listener.single.PermissionListener;
-
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AfterConnectedActivity extends AppCompatActivity {
 
@@ -69,9 +50,7 @@ public class AfterConnectedActivity extends AppCompatActivity {
     private static final String TAG = AfterConnectedActivity.class.getSimpleName();
 
     private String mail = "";
-
     private String imeiS = "";
-
     private TextView email      = null;
     private TextView emei       = null;
     private ImageView image = null;
@@ -81,58 +60,50 @@ public class AfterConnectedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Show the welcome screen / login authentication dialog
-        setContentView(R.layout.testlayout);
+        setContentView(R.layout.afterauthent);
 
         Intent intent = getIntent();
-
         mail = intent.getStringExtra("mail");
 
         this.email      = findViewById(R.id.mail);
         this.emei      = findViewById(R.id.emei);
         this.image = findViewById(R.id.imageView);
 
+        // Check les permissions
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
-
+            // Demande avec un pop-up
             Dexter.withActivity(this)
                     .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     .withListener(new BasePermissionListener())
                     .check();
         }
 
+        // Recupère l'image
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File imgFile = new File(path, "perso.jpg");
 
+        // Test image
         if(imgFile.exists()){
-
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
             image.setImageBitmap(myBitmap);
-
         }else {
             Log.w(TAG, "Image not found");
         }
-        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ) {
 
+        // Check permission pour l'IMEI
+        if ( ContextCompat.checkSelfPermission( this, Manifest.permission.READ_PHONE_STATE ) != PackageManager.PERMISSION_GRANTED ) {
+            // Demande l'autorisation
             Dexter.withActivity(this)
                     .withPermission(Manifest.permission.READ_PHONE_STATE)
                     .withListener(new BasePermissionListener())
                     .check();
         } else {
+            // Recupere l'IMEI
             TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
             imeiS = telephonyManager.getDeviceId();
             this.emei.setText(imeiS);
         }
 
-
         this.email.setText(mail);
-
-
-
-
     }
-
-    public void onBackPressed() {
-
-    }
-
 }
