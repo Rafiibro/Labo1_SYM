@@ -25,6 +25,7 @@
  */
 package ch.heigvd.sym.template;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import android.content.Intent;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,8 +56,59 @@ public class MainActivity extends AppCompatActivity {
     private EditText password 	= null;
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+
+		Log.i("Info labo 1: ", "onStart()");
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		Log.i("Info labo 1: ", "onResume()");
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		Log.i("Info labo 1: ", "onPause()");
+
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		Log.i("Info labo 1: ", "onStop()");
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		Log.i("Info labo 1: ", "onDestroy()");
+
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+		Log.i("Info labo 1: ", "onCreate()");
+
+		String languageToLoad = "hi";
+		Locale locale = new Locale(languageToLoad);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getResources().updateConfiguration(config,getResources().getDisplayMetrics());
+
+
 		// Show the welcome screen / login authentication dialog
 		setContentView(R.layout.authent);
 
